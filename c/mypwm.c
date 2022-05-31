@@ -18,10 +18,11 @@
 #include "mraa/pwm.h"
 
 /* PWM declaration */
-#define PWM 11
+#define PWM0 11
+#define PWM1 13
 
 /* PWM period in us */
-#define PWM_FREQ 200
+#define PWM_FREQ 20000
 
 volatile sig_atomic_t flag = 1;
 
@@ -37,56 +38,77 @@ sig_handler(int signum)
 int
 main(void)
 {
-    mraa_result_t status = MRAA_SUCCESS;
-    mraa_pwm_context pwm;
-    float value = 0.0f;
-    float output;
+    mraa_result_t status0 = MRAA_SUCCESS;
+    mraa_result_t status1 = MRAA_SUCCESS;
+    // typedef struct _pwm* mraa_pwm_context;
+    mraa_pwm_context pwm0;
+    // _pwm* pwm0
+    mraa_pwm_context pwm1;
+    float value = 0.1f;
+    float output0;
+    float output1;
 
     /* initialize mraa for the platform (not needed most of the times) */
     mraa_init();
 
     //! [Interesting]
-    pwm = mraa_pwm_init(PWM);
-    if (pwm == NULL) {
+    pwm0 = mraa_pwm_init(PWM0);
+    if (pwm0 == NULL) {
+        fprintf(stderr, "Failed to initialize PWM\n");
+        mraa_deinit();
+        return EXIT_FAILURE;
+    }
+    pwm1 = mraa_pwm_init(PWM1);
+    if (pwm1 == NULL) {
         fprintf(stderr, "Failed to initialize PWM\n");
         mraa_deinit();
         return EXIT_FAILURE;
     }
 
     /* set PWM period */
-    status = mraa_pwm_period_us(pwm, PWM_FREQ);
-    if (status != MRAA_SUCCESS) {
+    status0 = mraa_pwm_period_us(pwm0, PWM_FREQ);
+    status1 = mraa_pwm_period_us(pwm1, PWM_FREQ);
+    if (status0 != MRAA_SUCCESS) {
+        goto err_exit;
+    }
+    if (status1 != MRAA_SUCCESS) {
         goto err_exit;
     }
 
     /* enable PWM */
-    status = mraa_pwm_enable(pwm, 1);
-    if (status != MRAA_SUCCESS) {
+    status0 = mraa_pwm_enable(pwm0, 1);
+    if (status0 != MRAA_SUCCESS) {
+        goto err_exit;
+    }
+    status1 = mraa_pwm_enable(pwm1, 1);
+    if (status1 != MRAA_SUCCESS) {
         goto err_exit;
     }
 
-    while (flag) {
-        value = value + 0.01f;
 
-        /* write PWM duty cyle */
-        status = mraa_pwm_write(pwm, value);
-        if (status != MRAA_SUCCESS) {
+        /* write PWM duty cycle 占空比*/
+        status0 = mraa_pwm_write(pwm0, value);
+        status1 = mraa_pwm_write(pwm1, value);
+        if (status0 != MRAA_SUCCESS) {
             goto err_exit;
         }
-
+		if (status1 != MRAA_SUCCESS) {
+            goto err_exit;
+        }
         usleep(50000);
 
-        if (value >= 1.0f) {
-            value = 0.0f;
-        }
 
-        /* read PWM duty cyle */
-        output = mraa_pwm_read(pwm);
-        fprintf(stdout, "PWM value is %f\n", output);
-    }
+        /* read PWM duty cycle */
+        output0 = mraa_pwm_read(pwm0);
+        output1 = mraa_pwm_read(pwm1);
+        fprintf(stdout, "PWM0 value is %f\n", output0);
+        fprintf(stdout, "PWM1 value is %f\n", output1);
+        
+    
 
     /* close PWM */
-    mraa_pwm_close(pwm);
+    mraa_pwm_close(pwm0);
+    mraa_pwm_close(pwm1);
 
     //! [Interesting]
     /* deinitialize mraa for the platform (not needed most of the times) */
@@ -95,10 +117,12 @@ main(void)
     return EXIT_SUCCESS;
 
 err_exit:
-    mraa_result_print(status);
+    mraa_result_print(status0);
+    mraa_result_print(status1);
 
     /* close PWM */
-    mraa_pwm_close(pwm);
+    mraa_pwm_close(pwm0);
+    mraa_pwm_close(pwm1);
 
     /* deinitialize mraa for the platform (not needed most of the times) */
     mraa_deinit();
