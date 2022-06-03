@@ -5,6 +5,7 @@
 * usage: main函数在程序开始时直接调用init()来初始化所有引脚
 * 程序结束时调用deinit()来释放所有引脚
 * 调用rotate(mraa_pwm_context dev, float degree)来使舵机旋转到指定角度
+* 注意旋转角度为1-180度
 */
 
 #pragma once
@@ -15,6 +16,7 @@
 #include <unistd.h>
 
 /* mraa header */
+#include "c/pwm.h"
 #include "mraa/pwm.h"
 #include "mraa/gpio.h"
 
@@ -28,7 +30,21 @@
 /* PWM period(周期) in us */
 #define PWM_FREQ 20000
 
-/* 初始化所有引脚 */
+void deinit(){
+	mraa_pwm_close(pwm0);
+	mraa_pwm_close(pwm1);
+	mraa_gpio_close(gpio_1);
+	mraa_deinit();
+}
+
+/* 释放所有引脚 */
+void deinit(){
+	mraa_pwm_close(pwm0);
+	mraa_pwm_close(pwm1);
+	mraa_gpio_close(gpio_1);
+	mraa_deinit();
+}
+
 void init(){
 	/* 定义针脚 */
 	mraa_pwm_context pwm0;
@@ -98,9 +114,12 @@ void init(){
     
 }
 
-/* rotate TO 0-180 degree */
+/* rotate TO 1-180 degree */
 void rotate(mraa_pwm_context dev, float degree){
-	
+	/* write PWM duty cyle */
+    float duty;
+    duty =  (degree * 2 / 180) / 20;
+    mraa_pwm_write(dev,duty);
 }
 
 /**
