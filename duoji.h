@@ -11,6 +11,7 @@
 #pragma once
 
 /* standard headers */
+#include <cstdlib>
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -30,13 +31,6 @@
 /* PWM period(周期) in us */
 #define PWM_FREQ 20000
 
-void deinit(){
-	mraa_pwm_close(pwm0);
-	mraa_pwm_close(pwm1);
-	mraa_gpio_close(gpio_1);
-	mraa_deinit();
-}
-
 /* 释放所有引脚 */
 void deinit(){
 	mraa_pwm_close(pwm0);
@@ -46,6 +40,10 @@ void deinit(){
 }
 
 void init(){
+
+    /* 定义状态码 */
+    mraa_result_t status = MRAA_SUCCESS;
+
 	/* 定义针脚 */
 	mraa_pwm_context pwm0;
     mraa_pwm_context pwm1;
@@ -116,10 +114,26 @@ void init(){
 
 /* rotate TO 1-180 degree */
 void rotate(mraa_pwm_context dev, float degree){
+
+    /* 定义状态码 */
+    mraa_result_t status = MRAA_SUCCESS;
+
+    /* 容错判断 */
+    if(degree > 180 || degree <= 0){
+        fprintf(stderr, "Invalid degree\n");
+        deinit();
+        return EXIT_FAILURE;
+    }
 	/* write PWM duty cyle */
     float duty;
     duty =  (degree * 2 / 180) / 20;
-    mraa_pwm_write(dev,duty);
+    status = mraa_pwm_write(dev, degree);
+        if (status != MRAA_SUCCESS) {
+            mraa_result_print(status);
+            mraa_pwm_close(dev);
+            mraa_deinit();
+		    return EXIT_FAILURE;
+        }
 }
 
 /**
