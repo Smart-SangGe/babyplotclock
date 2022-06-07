@@ -32,7 +32,7 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                duoji(D3, LIFT0); // 抬臂角度需修改
+                //duoji(D3, LIFT0); // 抬臂角度需修改
             }
         }
         else
@@ -42,7 +42,7 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                duoji(D3, LIFT0); // 抬臂角度需修改
+                //duoji(D3, LIFT0); // 抬臂角度需修改
             }
         }
 
@@ -57,7 +57,7 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                duoji(D3, LIFT1); // 抬臂角度需修改
+                //duoji(D3, LIFT1); // 抬臂角度需修改
             }
         }
         else
@@ -67,7 +67,7 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                duoji(D3, LIFT1); // 抬臂角度需修改
+                //duoji(D3, LIFT1); // 抬臂角度需修改
             }
         }
 
@@ -82,7 +82,7 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                duoji(D3, LIFT2); // 抬臂角度需修改
+                //duoji(D3, LIFT2); // 抬臂角度需修改
             }
         }
         else
@@ -92,7 +92,7 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                duoji(D3, LIFT2); // 抬臂角度需修改
+                //duoji(D3, LIFT2); // 抬臂角度需修改
             }
         }
         break;
@@ -175,8 +175,8 @@ void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角
     a1 = atan2(dy, dx);
     a2 = return_angle(L1, (L2 - L3), c);
     angle.angle2 = a1 - a2;
-    duoji(D1, angle.angle1); 
-    duoji(D2, angle.angle2);
+    // duoji(D1, angle.angle1); 
+    // duoji(D2, angle.angle2);
 }
 void drawTo(double pX, double pY) //到达指定坐标
 {
