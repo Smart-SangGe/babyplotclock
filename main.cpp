@@ -6,7 +6,7 @@
 
 void voice_broadcast(int * h_m)
 {
-    char s[20] = "play ##:##.mp3"; // ϵͳ����
+    char s[20] = "play ./sounds/##:##.mp3"; // ϵͳ����
     int hour, minute;
 
     time_t tmpcal_ptr;
