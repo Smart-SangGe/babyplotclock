@@ -1,7 +1,17 @@
+/*
+* Author: Pan Qiang
+* reference: 
+*
+* usage: 
+*/
+
+#pragma once
+
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <dos.h>
+#include "duoji.h"
 #define M_PI 3.14159265358979323846
 
 //以下三个舵机编号需修改：
@@ -155,6 +165,7 @@ void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角
 {
     // delay(1);
     double dx, dy, c, a1, a2, Hx, Hy, angle1, angle2;
+    float degree1, degree2;
 
     dx = Tx - O1X; //与做舵机x坐标的差值
     dy = Ty - O1Y; // y坐标的差值
@@ -175,6 +186,9 @@ void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角
     a1 = atan2(dy, dx);
     a2 = return_angle(L1, (L2 - L3), c);
     angle.angle2 = a1 - a2;
+
+    // rotate(pwm1, degree1);
+    // rotate(pwm2, degree2);
     duoji(D1, angle.angle1); 
     duoji(D2, angle.angle2);
 }
