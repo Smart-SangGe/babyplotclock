@@ -132,7 +132,7 @@ void rotate(mraa_pwm_context dev, float degree){
 	/* write PWM duty cyle */
     float duty;
     duty =  (degree * 2 / 180) / 20;
-    status = mraa_pwm_write(dev, degree);
+    status = mraa_pwm_write(dev, duty);
         if (status != MRAA_SUCCESS) {
             mraa_result_print(status);
             mraa_pwm_close(dev);
