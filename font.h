@@ -1,32 +1,22 @@
-/*
-* Author: Pan Qiang
-* reference: 
-*
-* usage: 
-*/
-
-#pragma once
-
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <dos.h>
-#include "duoji.h"
+#include <unistd.h>
 #define M_PI 3.14159265358979323846
 
-//以下三个舵机编号需修改：
+//以下三个舵机编号需修改�?
 #define D1 1 // 左臂舵机
 #define D2 2 // 右臂舵机
 #define D3 3 // 抬臂舵机
 
 //以下三个宏需修改为角度：
 #define LIFT0 180 // 1350 落笔写字
-#define LIFT1 90  // 1250 写字时抬臂动作 一般比lift0 小100左右
+#define LIFT1 90  // 1250 写字时抬臂动�? 一般比lift0 �?100左右
 #define LIFT2 30  // 1100 高抬笔架
 
 int servoLift = LIFT2;
 
-//抬笔函数，调整笔的高度 0，落笔写字； 1，书写时抬笔； 2，太高笔用于插板擦
+//抬笔函数，调整笔的高�? 0，落笔写字； 1，书写时抬笔�? 2，太高笔用于插板�?
 void lift(int lift)
 {
     switch (lift)
@@ -114,12 +104,12 @@ struct angle
     double angle1;
     double angle2;
 } angle;
-//左右舵机的初始坐标
+//左右舵机的初始坐�?
 #define O1X 22
 #define O1Y -25
 #define O2X 47
 #define O2Y -25
-//机械臂长度
+//机械臂长�?
 #define L1 35
 #define L2 57.1
 #define L3 14
@@ -147,7 +137,7 @@ float LC_Num0[][100] = {
 double const rubberx = 82, rubbery = 46;
 double lastx = rubberx;
 double lasty = rubbery;
-//运笔至坐标位置
+//运笔至坐标位�?
 int readl(int num, int flag, int place) //读取数字库的坐标
 {
     int i, j;
@@ -157,22 +147,21 @@ int readl(int num, int flag, int place) //读取数字库的坐标
         return 0;
     return 1;
 }
-double return_angle(double a, double b, double c) //计算a与c的夹角并返回夹角的值
+double return_angle(double a, double b, double c) //计算a与c的夹角并返回夹角的�?
 {
     return acos((a * a + c * c - b * b) / (2 * a * c));
 }
-void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角度
+void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角�?
 {
     // delay(1);
     double dx, dy, c, a1, a2, Hx, Hy, angle1, angle2;
-    float degree1, degree2;
 
-    dx = Tx - O1X; //与做舵机x坐标的差值
-    dy = Ty - O1Y; // y坐标的差值
+    dx = Tx - O1X; //与做舵机x坐标的差�?
+    dy = Ty - O1Y; // y坐标的差�?
 
-    c = sqrt(dx * dx + dy * dy);  //与左舵机的距离
+    c = sqrt(dx * dx + dy * dy);  //与左舵机的距�?
     a1 = atan2(dy, dx);           //返回以弧度表示的 y/x 的反正切得到角度
-    a2 = return_angle(L1, L2, c); //机械臂一与xo1的夹角
+    a2 = return_angle(L1, L2, c); //机械臂一与xo1的夹�?
     angle.angle1 = a1 + a2;
 
     a2 = return_angle(L2, L1, c);
@@ -186,16 +175,8 @@ void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角
     a1 = atan2(dy, dx);
     a2 = return_angle(L1, (L2 - L3), c);
     angle.angle2 = a1 - a2;
-<<<<<<< HEAD
-
-    // rotate(pwm1, degree1);
-    // rotate(pwm2, degree2);
-    duoji(D1, angle.angle1); 
-    duoji(D2, angle.angle2);
-=======
     // duoji(D1, angle.angle1); 
     // duoji(D2, angle.angle2);
->>>>>>> 581f2ae1aa1ac33ca64d12e8f66f1393432da18d
 }
 void drawTo(double pX, double pY) //到达指定坐标
 {
@@ -354,7 +335,7 @@ void number(float bx, float by, int num, float scale)
         break;
 
     case 11:
-        //打冒号
+        //打冒�?
         drawTo(bx + 5 * scale, by + 15 * scale);
         lift(0);
         bogenGZS(bx + 5 * scale, by + 15 * scale, 0.1 * scale, 1, -1, 1);
