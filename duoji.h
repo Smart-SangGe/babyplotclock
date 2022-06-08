@@ -31,6 +31,11 @@
 /* PWM period(周期) in us */
 #define PWM_FREQ 20000
 
+/* 定义函数 */
+void init();
+void rotate(mraa_pwm_context dev, float degree);
+void deinit();
+
 /* 释放所有引脚 */
 void deinit(){
 	mraa_pwm_close(pwm0);
