@@ -6,12 +6,12 @@
 
 void voice_broadcast(int * h_m)
 {
-    char now[10] = "now.mp3";
-    char am[10] = "am.mp3";
-    char pm[10] = "pm.mp3";
-    char dot[10] = "hour.mp3";
-    char min[10] = "min.mp3";
-    char number[10] = "00.mp3";
+    char now[] = "play sounds/now.mp3";
+    char am[] = "play sounds/am.mp3";
+    char pm[] = "play sounds/pm.mp3";
+    char dot[] = "play sounds/hour.mp3";
+    char min[] = "play sounds/min.mp3";
+    char number[] = "play sounds/00.mp3";
     int hour, minute;
 
     time_t tmpcal_ptr;
@@ -31,24 +31,24 @@ void voice_broadcast(int * h_m)
     {
         system(pm);
         hour -= 12;
-        number[0] = hour / 10 == 0 ? ' ' : '1'; // 写入小时的十位，如果小时只有一位则将小时的十位置空，否则小时的十位为一
-        number[1] = (char)(hour % 10 + 48); // 写入小时的个位
+        number[12] = (char)(hour / 10 + 48); // 写入小时的十位，如果小时只有一位则将小时的十位置空，否则小时的十位为一
+        number[13] = (char)(hour % 10 + 48); // 写入小时的个位
         system(number);
         system(dot);
-        number[0] = minute / 10 == 0 ? ' ' : (char)(minute / 10 + 48); // 写入分钟的十位，如果分钟只有一位则将分钟的十位置空
-        number[1] = (char)(minute % 10 + 48);
+        number[12] = (char)(minute / 10 + 48); // 写入分钟的十位，如果分钟只有一位则将分钟的十位置空
+        number[13] = (char)(minute % 10 + 48);
         system(number);
         system(min);
     }
     else
     {
         system(am);
-        number[0] = hour / 10 == 0 ? ' ' : '1'; // 写入小时的十位，如果小时只有一位则将小时的十位置空，否则小时的十位为一
-        number[1] = (char)(hour % 10 + 48); // 写入小时的个位
+        number[12] = (char)(hour / 10 + 48); // 写入小时的十位，如果小时只有一位则将小时的十位置空，否则小时的十位为一
+        number[13] = (char)(hour % 10 + 48); // 写入小时的个位
         system(number);
         system(dot);
-        number[0] = minute / 10 == 0 ? ' ' : (char)(minute / 10 + 48); // 写入分钟的十位，如果分钟只有一位则将分钟的十位置空
-        number[1] = (char)(minute % 10 + 48);
+        number[12] = (char)(minute / 10 + 48); // 写入分钟的十位，如果分钟只有一位则将分钟的十位置空
+        number[13] = (char)(minute % 10 + 48);
         system(number);
         system(min);
     }
@@ -58,7 +58,10 @@ int main()
 {
     int i, h_m[4] = {0}; // h_m数组分别存放当前系统时间小时的十位、个位以及分钟的十位、个位
     int flag = 0; // flag代表组成一个数字的各组坐标的x坐标
-    voice_broadcast(h_m); //语音播报
+    for(i = 0; i < 3; i++){
+        voice_broadcast(h_m); //语音播报
+    }
+    
 
     for (i = 0; i < 4; i++)
     {
