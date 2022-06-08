@@ -5,13 +5,13 @@
 * usage: main函数在程序开始时直接调用init()来初始化所有引脚
 * 程序结束时调用deinit()来释放所有引脚
 * 调用rotate(mraa_pwm_context dev, float degree)来使舵机旋转到指定角度
-* 注意旋转角度为1-180度
+* 注意旋转角度为0-180度
 */
 
 #pragma once
 
 /* standard headers */
-#include <cstdlib>
+//#include <cstdlib>
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -28,37 +28,41 @@
 /* GPIO declaration */
 #define GPIO_PIN_1 15
 
-/* PWM period(周期) in us */
-#define PWM_FREQ 20000
+/* PWM period(周期) in ms */
+#define PWM_FREQ 20
+
+// extern mraa_pwm_context pwm0;
+// extern mraa_pwm_context pwm1;
+// extern mraa_gpio_context gpio1;
+// mraa_gpio_context gpio1 = mraa_gpio_init(GPIO_PIN_1);
+// mraa_pwm_context pwm0 = mraa_pwm_init(PWM0);
+// mraa_pwm_context pwm1 = mraa_pwm_init(PWM1);
+mraa_pwm_context pwm0;
+mraa_pwm_context pwm1;
+mraa_gpio_context gpio1;
+
 
 /* 定义函数 */
 void init();
 void rotate(mraa_pwm_context dev, float degree);
 void deinit();
 
-/* 释放所有引脚 */
-void deinit(){
-	mraa_pwm_close(pwm0);
-	mraa_pwm_close(pwm1);
-	mraa_gpio_close(gpio_1);
-	mraa_deinit();
-}
-
+/* 初始化函数 */
 void init(){
 
     /* 定义状态码 */
     mraa_result_t status = MRAA_SUCCESS;
 
 	/* 定义针脚 */
-	mraa_pwm_context pwm0;
-    mraa_pwm_context pwm1;
-    mraa_gpio_context gpio1;
+	// mraa_pwm_context pwm0;
+    // mraa_pwm_context pwm1;
+    // mraa_gpio_context gpio1;
     
     /* 初始化引脚，如果初始化失败则退出 */
     gpio1 = mraa_gpio_init(GPIO_PIN_1);
 	pwm0 = mraa_pwm_init(PWM0);
 	pwm1 = mraa_pwm_init(PWM1);
-	if (gpio_1 == NULL) {
+	if (gpio1 == NULL) {
         fprintf(stderr, "Failed to initialize GPIO %d\n", GPIO_PIN_1);
         mraa_deinit();
         return EXIT_FAILURE;
@@ -75,14 +79,14 @@ void init(){
     }
     
     /* set PWM period */
-    status = mraa_pwm_period_us(pwm0, PWM_FREQ);
+    status = mraa_pwm_period_ms(pwm0, PWM_FREQ);
     if (status != MRAA_SUCCESS) {
         mraa_result_print(status);
 		mraa_pwm_close(pwm0);
 		mraa_deinit();
 		return EXIT_FAILURE;
     }
-    status = mraa_pwm_period_us(pwm1, PWM_FREQ);
+    status = mraa_pwm_period_ms(pwm1, PWM_FREQ);
     if (status != MRAA_SUCCESS) {
 		mraa_result_print(status);
 		mraa_pwm_close(pwm1);
@@ -124,14 +128,14 @@ void rotate(mraa_pwm_context dev, float degree){
     mraa_result_t status = MRAA_SUCCESS;
 
     /* 容错判断 */
-    if(degree > 180 || degree <= 0){
+    if(degree > 180 || degree < 0){
         fprintf(stderr, "Invalid degree\n");
         deinit();
         return EXIT_FAILURE;
     }
 	/* write PWM duty cyle */
     float duty;
-    duty =  (degree * 2 / 180) / 20;
+    duty =  (1 + (degree / 180)) / 20;
     status = mraa_pwm_write(dev, duty);
         if (status != MRAA_SUCCESS) {
             mraa_result_print(status);
@@ -139,6 +143,14 @@ void rotate(mraa_pwm_context dev, float degree){
             mraa_deinit();
 		    return EXIT_FAILURE;
         }
+}
+
+/* 释放所有引脚 */
+void deinit(){
+	mraa_pwm_close(pwm0);
+	mraa_pwm_close(pwm1);
+	mraa_gpio_close(gpio1);
+	mraa_deinit();
 }
 
 /**
