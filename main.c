@@ -1,7 +1,7 @@
 /*
 * Author: Deng Qinyu
 */
-
+#include "duoji.h"
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -63,13 +63,17 @@ int main()
     int i, h_m[4] = {0}; // h_m数组分别存放当前系统时间小时的十位、个位以及分钟的十位、个位
     int flag = 0; // flag代表组成一个数字的各组坐标的x坐标
     for(i = 0; i < 3; i++){
-        voice_broadcast(h_m); //语音播报
+        voice_broadcast(h_m); 
+        // 语音播报并给h_m数组赋值
     }
-    
+
+    init(); // 初始化
 
     for (i = 0; i < 4; i++)
     {
-        while (LC_Num0[h_m[i]][flag] != 0)
+        flag=0;
+
+        while (LC_Num0[h_m[i] - 1][flag] != 0)
         {
             readl(h_m[i], flag, i + 1); // i + 1分别等于1, 2, 3, 4,对应四个数字
             // 执行结束后得到坐标(Tx, Ty)
