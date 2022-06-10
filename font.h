@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#define M_PI 3.14159265358979323846
+#define PI 3.14159
 
 //以下三个舵机编号需修改�?
 /* PWM declaration */
@@ -108,9 +108,9 @@ void lift(int lift)
 
 struct angle
 {
-    double angle1;
-    double angle2;
-} angle;
+    float angle1;
+    float angle2;
+} angle={0,0};
 //左右舵机的初始坐�?
 #define O1X 22
 #define O1Y -25
@@ -123,8 +123,8 @@ struct angle
 //点的坐标
 struct point
 {
-    double Tx;
-    double Ty;
+    float Tx;
+    float Ty;
 } point = {0, 0};
 //液晶格式的数字，记得修改单位
 float LC_Num0[][100] = {
@@ -141,9 +141,9 @@ float LC_Num0[][100] = {
 };
 
 //笔擦的坐标位置，摆臂调节好后，如不能对准笔擦可以微调此参数，单位毫米
-double const rubberx = 82, rubbery = 46;
-double lastx = rubberx;
-double lasty = rubbery;
+float const rubberx = 82, rubbery = 46;
+float lastx = rubberx;
+float lasty = rubbery;
 //运笔至坐标位�?
 int readl(int num, int flag, int place) //读取数字库的坐标
 {
@@ -156,12 +156,12 @@ int readl(int num, int flag, int place) //读取数字库的坐标
 }
 double return_angle(double a, double b, double c) //计算a与c的夹角并返回夹角的�?
 {
-    return acos((a * a + c * c - b * b) / (2 * a * c));
+    return acos(fminl(fmaxl((a * a + c * c - b * b) / (2 * a * c),-1.0),1.0));
 }
-void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角�?
+void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�?
 {
     // delay(1);
-    double dx, dy, c, a1, a2, Hx, Hy, angle1, angle2;
+    float dx, dy, c, a1, a2, Hx, Hy, angle1, angle2;
 
     dx = Tx - O1X; //与做舵机x坐标的差�?
     dy = Ty - O1Y; // y坐标的差�?
@@ -169,11 +169,12 @@ void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角
     c = sqrt(dx * dx + dy * dy);  //与左舵机的距�?
     a1 = atan2(dy, dx);           //返回以弧度表示的 y/x 的反正切得到角度
     a2 = return_angle(L1, L2, c); //机械臂一与xo1的夹�?
-    angle.angle1 = (a1 + a2)/M_PI*180;
-
+    printf("%f,%f\n",a1,a2);
+    angle.angle1 = (a1 + a2)/PI*180;
+    //printf("%f,%f\n",dx,dy);
     a2 = return_angle(L2, L1, c);
-    Hx = Tx + L3 * cos((a1 - a2 + 0.45937) + M_PI);
-    Hy = Ty + L3 * sin((a1 - a2 + 0.45937) + M_PI);
+    Hx = Tx + L3 * cos((a1 - a2 + 0.45937) + PI);
+    Hy = Ty + L3 * sin((a1 - a2 + 0.45937) + PI);
 
     dx = Hx - O2X;
     dy = Hy - O2Y;
@@ -181,19 +182,23 @@ void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角
     c = sqrt(dx * dx + dy * dy);
     a1 = atan2(dy, dx);
     a2 = return_angle(L1, (L2 - L3), c);
-    angle.angle2 = (a1 - a2)/M_PI*180;
-    rotate(PWM11, angle.angle1); 
-    rotate(PWM13, angle.angle2);
+    angle.angle2 = (a1 - a2)/PI*180;
+    rotate(pwm0, angle.angle1); 
+    //printf("pwm0:%f\n",angle.angle1);
+    usleep(400000);
+    //printf("angle0 sleep done\n");
+    //rotate(pwm1, angle.angle2);
+    usleep(400000);
 }
-void drawTo(double pX, double pY) //到达指定坐标
+void drawTo(float pX, float pY) //到达指定坐标
 {
-    double dx, dy, c;
+    float dx, dy, c;
     int i;
 
     // dx dy of new point
     dx = pX - lastx;
     dy = pY - lasty;
-    // path lenght in mm, times 4 equals 4 steps per mm
+    // path length in mm, times 4 equals 4 steps per mm
     c = floor(4 * sqrt(dx * dx + dy * dy));
 
     if (c < 1)
@@ -241,9 +246,9 @@ void number(float bx, float by, int num, float scale)
 
     case 0:
         drawTo(bx + 12 * scale, by + 6 * scale);
-        lift(0);
+        //lift(0);
         bogenGZS(bx + 7 * scale, by + 10 * scale, 10 * scale, -0.8, 6.7, 0.5);
-        lift(1);
+        //lift(1);
         break;
     case 1:
 
