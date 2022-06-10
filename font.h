@@ -1,6 +1,7 @@
 /*
 * Author: Pan Qiang
 */
+#include "duoji.h"
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,9 +9,12 @@
 #define M_PI 3.14159265358979323846
 
 //以下三个舵机编号需修改�?
-#define D1 1 // 左臂舵机
-#define D2 2 // 右臂舵机
-#define D3 3 // 抬臂舵机
+/* PWM declaration */
+#define PWM0 11
+#define PWM1 13
+
+/* GPIO declaration */
+#define GPIO_PIN_1 15
 
 //以下三个宏需修改为角度：
 #define LIFT0 180 // 1350 落笔写字
@@ -35,7 +39,7 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(D3, LIFT0); // 抬臂角度需修改
+                //duoji(PWM11, LIFT0); // 抬臂角度需修改,继电器通电
             }
         }
         else
@@ -45,7 +49,7 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(D3, LIFT0); // 抬臂角度需修改
+                //(D3, LIFT0); // 抬臂角度需修改
             }
         }
 
@@ -60,7 +64,7 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(D3, LIFT1); // 抬臂角度需修改
+                //duoji(PWM11, LIFT1); // 抬臂角度需修改
             }
         }
         else
@@ -70,7 +74,7 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(D3, LIFT1); // 抬臂角度需修改
+                //duoji(PWM11, LIFT1); // 抬臂角度需修改
             }
         }
 
@@ -85,7 +89,7 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(D3, LIFT2); // 抬臂角度需修改
+                //duoji(PWM11, LIFT2); // 抬臂角度需修改
             }
         }
         else
@@ -95,7 +99,7 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(D3, LIFT2); // 抬臂角度需修改
+                //duoji(PWM11, LIFT2); // 抬臂角度需修改
             }
         }
         break;
@@ -165,7 +169,7 @@ void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角
     c = sqrt(dx * dx + dy * dy);  //与左舵机的距�?
     a1 = atan2(dy, dx);           //返回以弧度表示的 y/x 的反正切得到角度
     a2 = return_angle(L1, L2, c); //机械臂一与xo1的夹�?
-    angle.angle1 = a1 + a2;
+    angle.angle1 = (a1 + a2)/M_PI*180;
 
     a2 = return_angle(L2, L1, c);
     Hx = Tx + L3 * cos((a1 - a2 + 0.45937) + M_PI);
@@ -177,9 +181,9 @@ void set_XY(double Tx, double Ty) //根据坐标返回给angle结构体两个角
     c = sqrt(dx * dx + dy * dy);
     a1 = atan2(dy, dx);
     a2 = return_angle(L1, (L2 - L3), c);
-    angle.angle2 = a1 - a2;
-    // duoji(D1, angle.angle1); 
-    // duoji(D2, angle.angle2);
+    angle.angle2 = (a1 - a2)/M_PI*180;
+    rotate(PWM11, angle.angle1); 
+    rotate(PWM13, angle.angle2);
 }
 void drawTo(double pX, double pY) //到达指定坐标
 {
