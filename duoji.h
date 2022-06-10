@@ -4,8 +4,11 @@
 *
 * usage: main函数在程序开始时直接调用init()来初始化所有引脚
 * 程序结束时调用deinit()来释放所有引脚
+* 设逆时针旋转为正方向。0度->占空比0.875，180度->占空比0.975
 * 调用rotate(mraa_pwm_context dev, float degree)来使舵机旋转到指定角度
-* 注意旋转角度为0-180度
+* 注意旋转角度为0-180度,调用完rotate函数要至少usleep(400000)来确保
+* 舵机不丢步。
+* 调用mraa_gpio_write(gpio1, 0)来使GPIO输出高低电平
 */
 
 #pragma once
@@ -31,12 +34,7 @@
 /* PWM period(周期) in ms */
 #define PWM_FREQ 20
 
-// extern mraa_pwm_context pwm0;
-// extern mraa_pwm_context pwm1;
-// extern mraa_gpio_context gpio1;
-// mraa_gpio_context gpio1 = mraa_gpio_init(GPIO_PIN_1);
-// mraa_pwm_context pwm0 = mraa_pwm_init(PWM0);
-// mraa_pwm_context pwm1 = mraa_pwm_init(PWM1);
+/* 定义针脚 */
 mraa_pwm_context pwm0;
 mraa_pwm_context pwm1;
 mraa_gpio_context gpio1;
@@ -53,10 +51,6 @@ void init(){
     /* 定义状态码 */
     mraa_result_t status = MRAA_SUCCESS;
 
-	/* 定义针脚 */
-	// mraa_pwm_context pwm0;
-    // mraa_pwm_context pwm1;
-    // mraa_gpio_context gpio1;
     
     /* 初始化引脚，如果初始化失败则退出 */
     gpio1 = mraa_gpio_init(GPIO_PIN_1);
@@ -135,7 +129,7 @@ void rotate(mraa_pwm_context dev, float degree){
     }
 	/* write PWM duty cyle */
     float duty;
-    duty =  (1 + (degree / 180)) / 20;
+    duty = 0.875 + (degree / 1800);
     status = mraa_pwm_write(dev, duty);
         if (status != MRAA_SUCCESS) {
             mraa_result_print(status);

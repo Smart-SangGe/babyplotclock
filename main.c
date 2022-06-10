@@ -1,3 +1,7 @@
+/*
+* Author: Deng Qinyu
+*/
+
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -6,12 +10,12 @@
 
 void voice_broadcast(int * h_m)
 {
-    char now[] = "play sounds/now.mp3";
-    char am[] = "play sounds/am.mp3";
-    char pm[] = "play sounds/pm.mp3";
-    char dot[] = "play sounds/hour.mp3";
-    char min[] = "play sounds/min.mp3";
-    char number[] = "play sounds/00.mp3";
+    char now[] = "play sounds/now.mp3 >> /dev/null 2>&1";
+    char am[] = "play sounds/am.mp3 >> /dev/null 2>&1";
+    char pm[] = "play sounds/pm.mp3 >> /dev/null 2>&1";
+    char dot[] = "play sounds/hour.mp3 >> /dev/null 2>&1";
+    char min[] = "play sounds/min.mp3 >> /dev/null 2>&1";
+    char number[] = "play sounds/00.mp3 >> /dev/null 2>&1";
     int hour, minute;
 
     time_t tmpcal_ptr;
