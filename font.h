@@ -243,82 +243,61 @@ void number(float bx, float by, int num, float scale)
 
     case 0:
         drawTo(bx + 12 * scale, by + 6 * scale);
-        lift(0);
-        bogenGZS(bx + 7 * scale, by + 10 * scale, 10 * scale, -0.8, 6.7, 0.5);
-        lift(1);
+        //bogenGZS(bx + 7 * scale, by + 10 * scale, 10 * scale, -0.8, 6.7, 0.5);
         break;
     case 1:
 
         drawTo(bx + 3 * scale, by + 15 * scale);
-        lift(0);
-        drawTo(bx + 10 * scale, by + 20 * scale);
-        drawTo(bx + 10 * scale, by + 0 * scale);
-        lift(1);
+        //drawTo(bx + 10 * scale, by + 20 * scale);
+        //drawTo(bx + 10 * scale, by + 0 * scale);
         break;
     case 2:
         drawTo(bx + 2 * scale, by + 12 * scale);
-        lift(0);
-        bogenUZS(bx + 8 * scale, by + 14 * scale, 6 * scale, 3, -0.8, 1);
-        drawTo(bx + 1 * scale, by + 0 * scale);
-        drawTo(bx + 12 * scale, by + 0 * scale);
-        lift(1);
+        //bogenUZS(bx + 8 * scale, by + 14 * scale, 6 * scale, 3, -0.8, 1);
+        //drawTo(bx + 1 * scale, by + 0 * scale);
+        //drawTo(bx + 12 * scale, by + 0 * scale);
         break;
     case 3:
         drawTo(bx + 2 * scale, by + 17 * scale);
-        lift(0);
-        bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 3, -2, 1);
-        bogenUZS(bx + 5 * scale, by + 5 * scale, 5 * scale, 1.57, -3, 1);
-        lift(1);
+        //bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 3, -2, 1);
+        //bogenUZS(bx + 5 * scale, by + 5 * scale, 5 * scale, 1.57, -3, 1);
         break;
     case 4:
         drawTo(bx + 10 * scale, by + 0 * scale);
-        lift(0);
-        drawTo(bx + 10 * scale, by + 20 * scale);
-        drawTo(bx + 2 * scale, by + 6 * scale);
-        drawTo(bx + 12 * scale, by + 6 * scale);
-        lift(1);
+        //drawTo(bx + 10 * scale, by + 20 * scale);
+        //drawTo(bx + 2 * scale, by + 6 * scale);
+        //drawTo(bx + 12 * scale, by + 6 * scale);
         break;
     case 5:
         drawTo(bx + 2 * scale, by + 5 * scale);
-        lift(0);
-        bogenGZS(bx + 5 * scale, by + 6 * scale, 6 * scale, -2.5, 2, 1);
-        drawTo(bx + 5 * scale, by + 20 * scale);
-        drawTo(bx + 12 * scale, by + 20 * scale);
-        lift(1);
+        //bogenGZS(bx + 5 * scale, by + 6 * scale, 6 * scale, -2.5, 2, 1);
+        //drawTo(bx + 5 * scale, by + 20 * scale);
+        //drawTo(bx + 12 * scale, by + 20 * scale);
         break;
     case 6:
         drawTo(bx + 2 * scale, by + 10 * scale);
-        lift(0);
-        bogenUZS(bx + 7 * scale, by + 6 * scale, 6 * scale, 2, -4.4, 1);
-        drawTo(bx + 11 * scale, by + 20 * scale);
-        lift(1);
+        //bogenUZS(bx + 7 * scale, by + 6 * scale, 6 * scale, 2, -4.4, 1);
+        //drawTo(bx + 11 * scale, by + 20 * scale);
         break;
     case 7:
         drawTo(bx + 2 * scale, by + 20 * scale);
-        lift(0);
-        drawTo(bx + 12 * scale, by + 20 * scale);
-        drawTo(bx + 2 * scale, by + 0);
-        lift(1);
+        //drawTo(bx + 12 * scale, by + 20 * scale);
+        //drawTo(bx + 2 * scale, by + 0);
         break;
     case 8:
         drawTo(bx + 5 * scale, by + 10 * scale);
-        lift(0);
-        bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 4.7, -1.6, 1);
-        bogenGZS(bx + 5 * scale, by + 5 * scale, 5 * scale, -4.7, 2, 1);
-        lift(1);
+        //bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 4.7, -1.6, 1);
+        //bogenGZS(bx + 5 * scale, by + 5 * scale, 5 * scale, -4.7, 2, 1);
         break;
 
     case 9:
         drawTo(bx + 9 * scale, by + 11 * scale);
-        lift(0);
-        bogenUZS(bx + 7 * scale, by + 15 * scale, 5 * scale, 4, -0.5, 1);
-        drawTo(bx + 5 * scale, by + 0);
-        lift(1);
+        //bogenUZS(bx + 7 * scale, by + 15 * scale, 5 * scale, 4, -0.5, 1);
         break;
 
     case 111:
         //擦除画板，如有边缘未能擦到可以修改下面的位置参数
-        lift(0);
+        lift();
         // delay(50);
         drawTo(rubberx, rubbery);
         drawTo(70, rubbery);
@@ -339,7 +318,7 @@ void number(float bx, float by, int num, float scale)
         drawTo(7, rubbery);
         drawTo(58, rubbery);
         drawTo(rubberx + 3, rubbery);
-        lift(2);
+        lift();
 
         break;
 
