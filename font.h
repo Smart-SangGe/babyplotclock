@@ -24,7 +24,7 @@
 int servoLift = LIFT2;
 
 //抬笔函数，调整笔的高�? 0，落笔写字； 1，书写时抬笔�? 2，太高笔用于插板�?
-void lift(int lift)
+/*void lift(int lift)
 {
     switch (lift)
     {
@@ -39,7 +39,8 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(pwm0, LIFT0); // 抬臂角度需修改,继电器通电
+                //rotate(pwm0, LIFT0); // 抬臂角度需修改,继电器通电
+                //usleep(400000);
             }
         }
         else
@@ -49,7 +50,8 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //(D3, LIFT0); // 抬臂角度需修改
+                //rotate(pwm0, LIFT0); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
 
@@ -64,7 +66,8 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(pwm0, LIFT1); // 抬臂角度需修改
+                //rotate(pwm0, LIFT1); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
         else
@@ -74,7 +77,8 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(pwm0, LIFT1); // 抬臂角度需修改
+                //rotate(pwm0, LIFT1); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
 
@@ -89,7 +93,8 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(pwm0, LIFT2); // 抬臂角度需修改
+                //rotate(pwm0, LIFT2); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
         else
@@ -99,12 +104,13 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(pwm0, LIFT2); // 抬臂角度需修改
+                //rotate(pwm0, LIFT2); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
         break;
     }
-}
+}*/
 
 struct angle
 {
@@ -156,7 +162,6 @@ int readl(int num, int flag, int place) //读取数字库的坐标
 }
 float return_angle(float a, float b, float c) //计算a与c的夹角并返回夹角的�?
 {
-    printf("x=%f\n",(a * a + c * c - b * b) / (2 * a * c));
     return acos(fminl(fmaxl((a * a + c * c - b * b) / (2 * a * c),-1.0),1.0));
 }
 void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�?
@@ -170,7 +175,6 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     c = sqrt(dx * dx + dy * dy);  //与左舵机的距�?
     a1 = atan2(dy, dx);           //返回以弧度表示的 y/x 的反正切得到角度
     a2 = return_angle(L1, L2, c); //机械臂一与xo1的夹�?
-    printf("%f\n",a2);
     angle.angle1 = (a1 + a2)/PI*180;
 
     //a2 = return_angle(L2, L1, c);
@@ -185,7 +189,9 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     //a2 = return_angle(L1, (L2 - L3), c);
     angle.angle2 = (a1 - a2)/M_PI*180;
     //rotate(pwm0, angle.angle1); 
+    //usleep(400000);
     //rotate(pwm1, angle.angle2);
+    //usleep(400000);
 }
 void drawTo(float pX, float pY) //到达指定坐标
 {
@@ -297,7 +303,7 @@ void number(float bx, float by, int num, float scale)
 
     case 111:
         //擦除画板，如有边缘未能擦到可以修改下面的位置参数
-        lift();
+        //lift();
         // delay(50);
         drawTo(rubberx, rubbery);
         drawTo(70, rubbery);
@@ -318,11 +324,11 @@ void number(float bx, float by, int num, float scale)
         drawTo(7, rubbery);
         drawTo(58, rubbery);
         drawTo(rubberx + 3, rubbery);
-        lift();
+        //lift();
 
         break;
 
-    case 11:
+    /*case 11:
         //打冒�?
         drawTo(bx + 5 * scale, by + 15 * scale);
         lift(0);
@@ -332,6 +338,6 @@ void number(float bx, float by, int num, float scale)
         lift(0);
         bogenGZS(bx + 5 * scale, by + 5 * scale, 0.1 * scale, 1, -1, 1);
         lift(1);
-        break;
+        break;*/
     }
 }
