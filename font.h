@@ -1,5 +1,5 @@
 /*
-* Author: Pan Qiang
+Author: Pan Qiang
 */
 //#include "duoji.h"
 #include <math.h>
@@ -25,10 +25,9 @@ int servoLift = LIFT2;
 
 struct change_angle//左右舵机的转动角度
 {
-    float a1=0;
-    float a2=0;
-}change_angle;
-float angle1=90,angle2=90;//左右舵机的初始角度
+    float a1;
+    float a2;
+}change_angle={0,0};
 //抬笔函数，调整笔的高�? 0，落笔写字； 1，书写时抬笔�? 2，太高笔用于插板�?
 /*void lift(int lift)
 {
@@ -45,7 +44,7 @@ float angle1=90,angle2=90;//左右舵机的初始角度
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //rotate(pwm0, LIFT0); // 抬臂角度需修改,继电器通电
+                ////rotate(pwm0, LIFT0); // 抬臂角度需修改,继电器通电
                 //usleep(400000);
             }
         }
@@ -56,7 +55,7 @@ float angle1=90,angle2=90;//左右舵机的初始角度
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //rotate(pwm0, LIFT0); // 抬臂角度需修改
+                ////rotate(pwm0, LIFT0); // 抬臂角度需修改
                 //usleep(400000);
             }
         }
@@ -72,7 +71,7 @@ float angle1=90,angle2=90;//左右舵机的初始角度
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //rotate(pwm0, LIFT1); // 抬臂角度需修改
+                ////rotate(pwm0, LIFT1); // 抬臂角度需修改
                 //usleep(400000);
             }
         }
@@ -83,7 +82,7 @@ float angle1=90,angle2=90;//左右舵机的初始角度
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //rotate(pwm0, LIFT1); // 抬臂角度需修改
+                ////rotate(pwm0, LIFT1); // 抬臂角度需修改
                 //usleep(400000);
             }
         }
@@ -99,7 +98,7 @@ float angle1=90,angle2=90;//左右舵机的初始角度
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //rotate(pwm0, LIFT2); // 抬臂角度需修改
+                ////rotate(pwm0, LIFT2); // 抬臂角度需修改
                 //usleep(400000);
             }
         }
@@ -110,7 +109,7 @@ float angle1=90,angle2=90;//左右舵机的初始角度
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //rotate(pwm0, LIFT2); // 抬臂角度需修改
+                ////rotate(pwm0, LIFT2); // 抬臂角度需修改
                 //usleep(400000);
             }
         }
@@ -138,6 +137,7 @@ struct point
     float Tx;
     float Ty;
 } point = {0, 0};
+float ang1=90.0 ,ang2=90.0;//左右舵机的初始角度
 //液晶格式的数字，记得修改单位
 float LC_Num0[][100] = {
     {7, 32.5, 10.5, 32.5, 10.5, 22.5, 7, 22.5, 7, 32.5, 0},
@@ -153,7 +153,7 @@ float LC_Num0[][100] = {
 };
 
 //笔擦的坐标位置，摆臂调节好后，如不能对准笔擦可以微调此参数，单位毫米
-float const rubberx = 82, rubbery = 46;
+float const rubberx = 0, rubbery = 36;
 float lastx = rubberx;
 float lasty = rubbery;
 //运笔至坐标位�?
@@ -172,8 +172,9 @@ float return_angle(float a, float b, float c) //计算a与c的夹角并返回夹
 }
 void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�?
 {
+    //printf("ang1=%f\n",ang1);
     // delay(1);
-    float dx, dy, c, a1, a2, Hx, Hy, angle1, angle2;
+    float dx, dy, c, a1, a2, Hx, Hy;
 
     dx = Tx - O1X; //与做舵机x坐标的差�?
     dy = Ty - O1Y; // y坐标的差�?
@@ -181,9 +182,10 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     c = sqrt(dx * dx + dy * dy);  //与左舵机的距�?
     a1 = atan2(dy, dx);           //返回以弧度表示的 y/x 的反正切得到角度
     a2 = return_angle(L1, L2, c); //机械臂一与xo1的夹�?
-    change_angle.a1=(a1+a2-angle.angle1)/PI*180;
-    angle.angle1=a1+a2;
-    rotate(pwm1,angle1-change_angle.a1);
+    change_angle.a1=(a1+a2)/PI*180-angle.angle1;
+    angle.angle1=(a1+a2)/PI*180;
+    //rotate(pwm1,ang1-change_angle.a1);
+    ang1=ang1-change_angle.a1;
     
     a2 = return_angle(L2, L1, c);
     Hx = Tx + L3 * cos((a1 - a2 + 0.45937) + PI);
@@ -195,14 +197,16 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     c = sqrt(dx * dx + dy * dy);
     a1 = atan2(dy, dx);
     a2 = return_angle(L1, (L2 - L3), c);
-    change_angle.a2=(a1-a2-angle.angle2)/PI*180;
-    angle.angle2 = a1 - a2;
-    rotate(pwm0, angle2-change_angle.a2); 
+    change_angle.a2=(a1-a2)/PI*180-angle.angle2;
+    angle.angle2 = (a1 - a2)/PI*180;
+    //rotate(pwm0, angle2-change_angle.a2); 
+    ang2=ang2-change_angle.a2;
+    printf("d2=%f",ang2);
     //printf("pwm0:%f\n",angle.angle1);
-    usleep(400000);
+    //usleep(400000);
     //printf("angle0 sleep done\n");
-    //rotate(pwm1, angle.angle2);
-    usleep(400000);
+    ////rotate(pwm1, angle.angle2);
+    //usleep(400000);
 }
 void drawTo(float pX, float pY) //到达指定坐标
 {
@@ -218,7 +222,7 @@ void drawTo(float pX, float pY) //到达指定坐标
     if (c < 1)
         c = 1;
 
-    for (i = 0; i <= c; i++)
+    for (i = 0; i <= c; i+=5)
     {
         // draw line point by point
         set_XY(lastx + (i * dx / c), lasty + (i * dy / c));
@@ -227,7 +231,7 @@ void drawTo(float pX, float pY) //到达指定坐标
     lastx = pX;
     lasty = pY;
 }
-void bogenUZS(float bx, float by, float radius, int start, int ende, float sqee)
+/*void bogenUZS(float bx, float by, float radius, int start, int ende, float sqee)
 {
     float inkr = -0.05;
     float count = 0;
@@ -250,18 +254,17 @@ void bogenGZS(float bx, float by, float radius, int start, int ende, float sqee)
                radius * sin(start + count) + by);
         count += inkr;
     } while ((start + count) <= ende);
-}
+}*/
 
 void number(float bx, float by, int num, float scale)
 {
-
     switch (num)
     {
 
     case 0:
         drawTo(bx + 12 * scale, by + 6 * scale);
         //lift(0);
-        bogenGZS(bx + 7 * scale, by + 10 * scale, 10 * scale, -0.8, 6.7, 0.5);
+        //bogenGZS(bx + 7 * scale, by + 10 * scale, 10 * scale, -0.8, 6.7, 0.5);
         //lift(1);
         break;
     case 1:
