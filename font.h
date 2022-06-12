@@ -1,20 +1,16 @@
 /*
 Author: Pan Qiang
 */
-//#include "duoji.h"
+
+#pragma once
+
+#include "duoji.h"
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #define PI 3.14159
 
-//以下三个舵机编号需修改�?
-/* PWM declaration */
-#define pwm0 11
-#define pwm1 13
-
-/* GPIO declaration */
-#define GPIO_PIN_1 15
 
 //以下三个宏需修改为角度：
 #define LIFT0 180 // 1350 落笔写字
@@ -198,13 +194,13 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     a2 = return_angle(L1, (L2 - L3), c);
     change_angle.a2=(a1-a2)/PI*180-angle.angle2;
     angle.angle2 = (a1 - a2)/PI*180;
-    //rotate(pwm0, ang1); 
+    rotate(pwm0, ang1); 
     ang2=ang2-change_angle.a2;
-    //printf("pwm0:%f\n",angle.angle1);
-    //usleep(400000);
+    printf("pwm0:%f\n",ang1);
+    usleep(400000);
     //printf("angle0 sleep done\n");
-    ////rotate(pwm1, ang2);
-    //usleep(400000);
+    rotate(pwm1, ang2);
+    usleep(400000);
 }
 void drawTo(float pX, float pY) //到达指定坐标
 {
@@ -220,7 +216,7 @@ void drawTo(float pX, float pY) //到达指定坐标
     if (c < 1)
         c = 1;
 
-    for (i = 0; i <= c; i+=5)
+    for (i = 0; i <= c; i+=15)
     {
         // draw line point by point
         set_XY(lastx + (i * dx / c), lasty + (i * dy / c));

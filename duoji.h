@@ -122,11 +122,18 @@ void rotate(mraa_pwm_context dev, float degree){
     mraa_result_t status = MRAA_SUCCESS;
 
     /* 容错判断 */
-    if(degree > 180 || degree < 0){
-        fprintf(stderr, "Invalid degree\n");
-        deinit();
-        return EXIT_FAILURE;
+    // if(degree > 180 || degree < 0){
+    //     fprintf(stderr, "Invalid degree\n");
+    //     deinit();
+    //     return EXIT_FAILURE;
+    // }
+    if(degree < 0){
+        degree = 0;
     }
+    if(degree > 180){
+        degree = 180;
+    }
+
 	/* write PWM duty cyle */
     float duty;
     duty = 0.875 + (degree / 1800);
