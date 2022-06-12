@@ -116,7 +116,7 @@ struct angle
 {
     float angle1;
     float angle2;
-} angle;
+} angle={0,0};
 //左右舵机的初始坐�?
 #define O1X 22
 #define O1Y -25
@@ -175,23 +175,26 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     c = sqrt(dx * dx + dy * dy);  //与左舵机的距�?
     a1 = atan2(dy, dx);           //返回以弧度表示的 y/x 的反正切得到角度
     a2 = return_angle(L1, L2, c); //机械臂一与xo1的夹�?
+    printf("%f,%f\n",a1,a2);
     angle.angle1 = (a1 + a2)/PI*180;
-
-    //a2 = return_angle(L2, L1, c);
-    Hx = Tx + L3 * cos((a1 - a2 + 0.45937) + M_PI);
-    Hy = Ty + L3 * sin((a1 - a2 + 0.45937) + M_PI);
+    //printf("%f,%f\n",dx,dy);
+    a2 = return_angle(L2, L1, c);
+    Hx = Tx + L3 * cos((a1 - a2 + 0.45937) + PI);
+    Hy = Ty + L3 * sin((a1 - a2 + 0.45937) + PI);
 
     dx = Hx - O2X;
     dy = Hy - O2Y;
 
     c = sqrt(dx * dx + dy * dy);
     a1 = atan2(dy, dx);
-    //a2 = return_angle(L1, (L2 - L3), c);
-    angle.angle2 = (a1 - a2)/M_PI*180;
-    //rotate(pwm0, angle.angle1); 
-    //usleep(400000);
+    a2 = return_angle(L1, (L2 - L3), c);
+    angle.angle2 = (a1 - a2)/PI*180;
+    rotate(pwm0, angle.angle1); 
+    //printf("pwm0:%f\n",angle.angle1);
+    usleep(400000);
+    //printf("angle0 sleep done\n");
     //rotate(pwm1, angle.angle2);
-    //usleep(400000);
+    usleep(400000);
 }
 void drawTo(float pX, float pY) //到达指定坐标
 {
@@ -201,7 +204,7 @@ void drawTo(float pX, float pY) //到达指定坐标
     // dx dy of new point
     dx = pX - lastx;
     dy = pY - lasty;
-    // path lenght in mm, times 4 equals 4 steps per mm
+    // path length in mm, times 4 equals 4 steps per mm
     c = floor(4 * sqrt(dx * dx + dy * dy));
 
     if (c < 1)
@@ -249,7 +252,9 @@ void number(float bx, float by, int num, float scale)
 
     case 0:
         drawTo(bx + 12 * scale, by + 6 * scale);
-        //bogenGZS(bx + 7 * scale, by + 10 * scale, 10 * scale, -0.8, 6.7, 0.5);
+        //lift(0);
+        bogenGZS(bx + 7 * scale, by + 10 * scale, 10 * scale, -0.8, 6.7, 0.5);
+        //lift(1);
         break;
     case 1:
 

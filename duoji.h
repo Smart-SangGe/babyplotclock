@@ -3,7 +3,7 @@
 * reference: mraa/example/c/pwm.c mraa/example/c/gpio.c
 *
 * usage: main函数在程序开始时直接调用init()来初始化所有引脚
-* 程序结束时调用deinit()来释放所有引脚
+* 程序结束时调用deinit()来释放所有引脚!!!
 * 设逆时针旋转为正方向。0度->占空比0.875，180度->占空比0.975
 * 调用rotate(mraa_pwm_context dev, float degree)来使舵机旋转到指定角度
 * 注意旋转角度为0-180度,调用完rotate函数要至少usleep(400000)来确保
