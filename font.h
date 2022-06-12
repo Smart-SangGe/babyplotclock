@@ -184,7 +184,6 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     a2 = return_angle(L1, L2, c); //机械臂一与xo1的夹�?
     change_angle.a1=(a1+a2)/PI*180-angle.angle1;
     angle.angle1=(a1+a2)/PI*180;
-    //rotate(pwm1,ang1-change_angle.a1);
     ang1=ang1-change_angle.a1;
     
     a2 = return_angle(L2, L1, c);
@@ -199,13 +198,12 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     a2 = return_angle(L1, (L2 - L3), c);
     change_angle.a2=(a1-a2)/PI*180-angle.angle2;
     angle.angle2 = (a1 - a2)/PI*180;
-    //rotate(pwm0, angle2-change_angle.a2); 
+    //rotate(pwm0, ang1); 
     ang2=ang2-change_angle.a2;
-    printf("d2=%f",ang2);
     //printf("pwm0:%f\n",angle.angle1);
     //usleep(400000);
     //printf("angle0 sleep done\n");
-    ////rotate(pwm1, angle.angle2);
+    ////rotate(pwm1, ang2);
     //usleep(400000);
 }
 void drawTo(float pX, float pY) //到达指定坐标
