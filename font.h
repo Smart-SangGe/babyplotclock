@@ -23,6 +23,12 @@
 
 int servoLift = LIFT2;
 
+struct change_angle//左右舵机的转动角度
+{
+    float a1=0;
+    float a2=0;
+}change_angle;
+float angle1=90,angle2=90;//左右舵机的初始角度
 //抬笔函数，调整笔的高�? 0，落笔写字； 1，书写时抬笔�? 2，太高笔用于插板�?
 /*void lift(int lift)
 {
@@ -116,7 +122,7 @@ struct angle
 {
     float angle1;
     float angle2;
-} angle={0,0};
+} angle={180,90};
 //左右舵机的初始坐�?
 #define O1X 22
 #define O1Y -25
@@ -175,9 +181,10 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     c = sqrt(dx * dx + dy * dy);  //与左舵机的距�?
     a1 = atan2(dy, dx);           //返回以弧度表示的 y/x 的反正切得到角度
     a2 = return_angle(L1, L2, c); //机械臂一与xo1的夹�?
-    printf("%f,%f\n",a1,a2);
-    angle.angle1 = (a1 + a2)/PI*180;
-    //printf("%f,%f\n",dx,dy);
+    change_angle.a1=(a1+a2-angle.angle1)/PI*180;
+    angle.angle1=a1+a2;
+    rotate(pwm1,angle1+change_angle.a1);
+    
     a2 = return_angle(L2, L1, c);
     Hx = Tx + L3 * cos((a1 - a2 + 0.45937) + PI);
     Hy = Ty + L3 * sin((a1 - a2 + 0.45937) + PI);
@@ -188,8 +195,9 @@ void set_XY(float Tx, float Ty) //根据坐标返回给angle结构体两个角�
     c = sqrt(dx * dx + dy * dy);
     a1 = atan2(dy, dx);
     a2 = return_angle(L1, (L2 - L3), c);
-    angle.angle2 = (a1 - a2)/PI*180;
-    rotate(pwm0, angle.angle1); 
+    change_angle.a2=(a1-a2-angle.angle2)/PI*180;
+    angle.angle2 = a1 - a2;
+    rotate(pwm0, angle2+change_angle.a2); 
     //printf("pwm0:%f\n",angle.angle1);
     usleep(400000);
     //printf("angle0 sleep done\n");
