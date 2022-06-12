@@ -1,7 +1,7 @@
 /*
 * Author: Pan Qiang
 */
-#include "duoji.h"
+//#include "duoji.h"
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,8 +10,8 @@
 
 //以下三个舵机编号需修改�?
 /* PWM declaration */
-#define PWM0 11
-#define PWM1 13
+#define pwm0 11
+#define pwm1 13
 
 /* GPIO declaration */
 #define GPIO_PIN_1 15
@@ -24,7 +24,7 @@
 int servoLift = LIFT2;
 
 //抬笔函数，调整笔的高�? 0，落笔写字； 1，书写时抬笔�? 2，太高笔用于插板�?
-void lift(int lift)
+/*void lift(int lift)
 {
     switch (lift)
     {
@@ -39,7 +39,8 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(PWM11, LIFT0); // 抬臂角度需修改,继电器通电
+                //rotate(pwm0, LIFT0); // 抬臂角度需修改,继电器通电
+                //usleep(400000);
             }
         }
         else
@@ -49,7 +50,8 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //(D3, LIFT0); // 抬臂角度需修改
+                //rotate(pwm0, LIFT0); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
 
@@ -64,7 +66,8 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(PWM11, LIFT1); // 抬臂角度需修改
+                //rotate(pwm0, LIFT1); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
         else
@@ -74,7 +77,8 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(PWM11, LIFT1); // 抬臂角度需修改
+                //rotate(pwm0, LIFT1); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
 
@@ -89,7 +93,8 @@ void lift(int lift)
                 servoLift--;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(PWM11, LIFT2); // 抬臂角度需修改
+                //rotate(pwm0, LIFT2); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
         else
@@ -99,12 +104,13 @@ void lift(int lift)
                 servoLift++;
                 // servo1.writeMicroseconds(servoLift);
                 // delayMicroseconds(LIFTSPEED);
-                //duoji(PWM11, LIFT2); // 抬臂角度需修改
+                //rotate(pwm0, LIFT2); // 抬臂角度需修改
+                //usleep(400000);
             }
         }
         break;
     }
-}
+}*/
 
 struct angle
 {
@@ -154,7 +160,7 @@ int readl(int num, int flag, int place) //读取数字库的坐标
         return 0;
     return 1;
 }
-double return_angle(double a, double b, double c) //计算a与c的夹角并返回夹角的�?
+float return_angle(float a, float b, float c) //计算a与c的夹角并返回夹角的�?
 {
     return acos(fminl(fmaxl((a * a + c * c - b * b) / (2 * a * c),-1.0),1.0));
 }
@@ -253,75 +259,56 @@ void number(float bx, float by, int num, float scale)
     case 1:
 
         drawTo(bx + 3 * scale, by + 15 * scale);
-        lift(0);
-        drawTo(bx + 10 * scale, by + 20 * scale);
-        drawTo(bx + 10 * scale, by + 0 * scale);
-        lift(1);
+        //drawTo(bx + 10 * scale, by + 20 * scale);
+        //drawTo(bx + 10 * scale, by + 0 * scale);
         break;
     case 2:
         drawTo(bx + 2 * scale, by + 12 * scale);
-        lift(0);
-        bogenUZS(bx + 8 * scale, by + 14 * scale, 6 * scale, 3, -0.8, 1);
-        drawTo(bx + 1 * scale, by + 0 * scale);
-        drawTo(bx + 12 * scale, by + 0 * scale);
-        lift(1);
+        //bogenUZS(bx + 8 * scale, by + 14 * scale, 6 * scale, 3, -0.8, 1);
+        //drawTo(bx + 1 * scale, by + 0 * scale);
+        //drawTo(bx + 12 * scale, by + 0 * scale);
         break;
     case 3:
         drawTo(bx + 2 * scale, by + 17 * scale);
-        lift(0);
-        bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 3, -2, 1);
-        bogenUZS(bx + 5 * scale, by + 5 * scale, 5 * scale, 1.57, -3, 1);
-        lift(1);
+        //bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 3, -2, 1);
+        //bogenUZS(bx + 5 * scale, by + 5 * scale, 5 * scale, 1.57, -3, 1);
         break;
     case 4:
         drawTo(bx + 10 * scale, by + 0 * scale);
-        lift(0);
-        drawTo(bx + 10 * scale, by + 20 * scale);
-        drawTo(bx + 2 * scale, by + 6 * scale);
-        drawTo(bx + 12 * scale, by + 6 * scale);
-        lift(1);
+        //drawTo(bx + 10 * scale, by + 20 * scale);
+        //drawTo(bx + 2 * scale, by + 6 * scale);
+        //drawTo(bx + 12 * scale, by + 6 * scale);
         break;
     case 5:
         drawTo(bx + 2 * scale, by + 5 * scale);
-        lift(0);
-        bogenGZS(bx + 5 * scale, by + 6 * scale, 6 * scale, -2.5, 2, 1);
-        drawTo(bx + 5 * scale, by + 20 * scale);
-        drawTo(bx + 12 * scale, by + 20 * scale);
-        lift(1);
+        //bogenGZS(bx + 5 * scale, by + 6 * scale, 6 * scale, -2.5, 2, 1);
+        //drawTo(bx + 5 * scale, by + 20 * scale);
+        //drawTo(bx + 12 * scale, by + 20 * scale);
         break;
     case 6:
         drawTo(bx + 2 * scale, by + 10 * scale);
-        lift(0);
-        bogenUZS(bx + 7 * scale, by + 6 * scale, 6 * scale, 2, -4.4, 1);
-        drawTo(bx + 11 * scale, by + 20 * scale);
-        lift(1);
+        //bogenUZS(bx + 7 * scale, by + 6 * scale, 6 * scale, 2, -4.4, 1);
+        //drawTo(bx + 11 * scale, by + 20 * scale);
         break;
     case 7:
         drawTo(bx + 2 * scale, by + 20 * scale);
-        lift(0);
-        drawTo(bx + 12 * scale, by + 20 * scale);
-        drawTo(bx + 2 * scale, by + 0);
-        lift(1);
+        //drawTo(bx + 12 * scale, by + 20 * scale);
+        //drawTo(bx + 2 * scale, by + 0);
         break;
     case 8:
         drawTo(bx + 5 * scale, by + 10 * scale);
-        lift(0);
-        bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 4.7, -1.6, 1);
-        bogenGZS(bx + 5 * scale, by + 5 * scale, 5 * scale, -4.7, 2, 1);
-        lift(1);
+        //bogenUZS(bx + 5 * scale, by + 15 * scale, 5 * scale, 4.7, -1.6, 1);
+        //bogenGZS(bx + 5 * scale, by + 5 * scale, 5 * scale, -4.7, 2, 1);
         break;
 
     case 9:
         drawTo(bx + 9 * scale, by + 11 * scale);
-        lift(0);
-        bogenUZS(bx + 7 * scale, by + 15 * scale, 5 * scale, 4, -0.5, 1);
-        drawTo(bx + 5 * scale, by + 0);
-        lift(1);
+        //bogenUZS(bx + 7 * scale, by + 15 * scale, 5 * scale, 4, -0.5, 1);
         break;
 
     case 111:
         //擦除画板，如有边缘未能擦到可以修改下面的位置参数
-        lift(0);
+        //lift();
         // delay(50);
         drawTo(rubberx, rubbery);
         drawTo(70, rubbery);
@@ -342,11 +329,11 @@ void number(float bx, float by, int num, float scale)
         drawTo(7, rubbery);
         drawTo(58, rubbery);
         drawTo(rubberx + 3, rubbery);
-        lift(2);
+        //lift();
 
         break;
 
-    case 11:
+    /*case 11:
         //打冒�?
         drawTo(bx + 5 * scale, by + 15 * scale);
         lift(0);
@@ -356,6 +343,6 @@ void number(float bx, float by, int num, float scale)
         lift(0);
         bogenGZS(bx + 5 * scale, by + 5 * scale, 0.1 * scale, 1, -1, 1);
         lift(1);
-        break;
+        break;*/
     }
 }

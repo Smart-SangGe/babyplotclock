@@ -10,8 +10,8 @@
 
 void voice_broadcast(int * h_m)
 {
-    char now[] = "play sounds/now.mp3 >> /dev/null 2>&1";
-    char am[] = "play sounds/am.mp3 >> /dev/null 2>&1";
+    char now[] = "play soundsw.mp3 >> /dev/null 2>&1";
+    char am[] = "play sounds.mp3 >> /dev/null 2>&1";
     char pm[] = "play sounds/pm.mp3 >> /dev/null 2>&1";
     char dot[] = "play sounds/hour.mp3 >> /dev/null 2>&1";
     char min[] = "play sounds/min.mp3 >> /dev/null 2>&1";
@@ -68,19 +68,25 @@ int main()
     }*/
 
     init(); // 初始化
+
     readl(1,flag, 4);
     number(point.Tx, point.Ty, 1, 0.9);
     deinit();
-
     /*for (i = 0; i < 4; i++)
     {
-        flag=0;
+        flag = 0;
+        k = 0;
 
         while (LC_Num0[h_m[i] - 1][flag] != 0)
         {
             readl(h_m[i], flag, i + 1); // i + 1分别等于1, 2, 3, 4,对应四个数字
             // 执行结束后得到坐标(Tx, Ty)
             number(point.Tx, point.Ty, h_m[i], 0.9);
+
+            if (!k)
+                lift(0);
+            
+            k = 1; // 表示落笔完成，之后循环
             flag++;
         }
      }*/
