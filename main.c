@@ -78,7 +78,7 @@ int main()
         k = 0;
         printf("now input the number is %d",h_m[i]);
         
-        while (LC_Num0[h_m[i] - 1][flag] != 0)
+        while (LC_Num0[h_m[i] - 1][flag * 2] != 0)
         {
             
             readl(h_m[i] - 1, flag, i + 1); // i + 1分别等于1, 2, 3, 4,对应四个数字
