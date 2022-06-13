@@ -72,20 +72,19 @@ int main()
     // mraa_gpio_write(gpio1, 1); // 继电器通电，控制抬臂舵机
     // lift(2); // 高抬臂
     
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < 1; i++)
     {
         flag = 0;
         k = 0;
-        printf("now input the number is %d",h_m[i]);
+        printf("now input the number is %d",4);
         
-        while (LC_Num0[h_m[i] - 1][flag] != 0)
+        while (LC_Num0[h_m[i]][flag*2] != 0)
         {
             
-            readl(h_m[i] - 1, flag, i + 1); // i + 1分别等于1, 2, 3, 4,对应四个数字
+            readl(h_m[i], flag, i + 1); // i + 1分别等于1, 2, 3, 4,对应四个数字
             // 执行结束后得到坐标(Tx, Ty)
             // mraa_gpio_write(gpio1, 0); // 继电器断电，控制左右臂舵机
-            number(point.Tx, point.Ty, h_m[i], 0.9);
-
+            number(point.Tx, point.Ty, 1, 0.9);
             if (!k)
             {
                 // mraa_gpio_write(gpio1, 1); // 继电器通电，控制抬臂舵机
