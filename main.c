@@ -62,45 +62,68 @@ int main()
 {
     int i, h_m[4] = {0}; // h_m数组分别存放当前系统时间小时的十位、个位以及分钟的十位、个位
     int flag = 0, k = 0; // flag代表组成一个数字的各组坐标的x坐标
-    for(i = 0; i < 3; i++){
+    for(i = 0; i <4; i++){
         voice_broadcast(h_m); 
         // 语音播报并给h_m数组赋值
         printf("playing");
     }
 
     init(); // 初始化
-    // mraa_gpio_write(gpio1, 1); // 继电器通电，控制抬臂舵机
-    // lift(2); // 高抬臂
-    
-    for (i = 0; i < 1; i++)
+    mraa_gpio_write(gpio1, 0); // 继电器通电，控制抬臂舵机
+    usleep(30000);
+    lift(3); // 普通抬臂
+    mraa_gpio_write(gpio1, 1); // 继电器通电，控制抬臂舵机
+    usleep(30000);
+    number(0, 0, 111, 1); // 控制机械臂擦除字迹，该情况不使用bx, by, 故bx，by置零
+    printf("角度=");
+    mraa_gpio_write(gpio1, 0); // 继电器通电，控制抬臂舵机
+    usleep(30000);
+    lift(2);
+
+    for (i = 0; i < 4; i++)
     {
         flag = 0;
         k = 0;
-        printf("now input the number is %d",4);
+        printf("now input the number is %d",h_m[i]);
         
         while (LC_Num0[h_m[i]][flag*2] != 0)
         {
-            
             readl(h_m[i], flag, i + 1); // i + 1分别等于1, 2, 3, 4,对应四个数字
             // 执行结束后得到坐标(Tx, Ty)
-            // mraa_gpio_write(gpio1, 0); // 继电器断电，控制左右臂舵机
-            number(point.Tx, point.Ty, 1, 0.9);
+             mraa_gpio_write(gpio1, 1); // 继电器断电，控制左右臂舵机
+             usleep(30000);
+            number(point.Tx, point.Ty, 1, 0);
+            printf("tx,ty=%f,%f",point.Tx,point.Ty);
             if (!k)
             {
-                // mraa_gpio_write(gpio1, 1); // 继电器通电，控制抬臂舵机
-                // lift(0);
+                mraa_gpio_write(gpio1, 0); // 继电器通电，控制抬臂舵机
+                usleep(30000);
+                lift(0);
             }
                 
             k = 1; // 表示落笔完成，之后循环
             flag++;
         }
 
-        // mraa_gpio_write(gpio1, 1); // 继电器通电，控制抬臂舵机
-        // lift(1); // 写字状态抬臂
+        mraa_gpio_write(gpio1, 0); // 继电器通电，控制抬臂舵机
+        usleep(30000);
+        lift(1); // 写字状态抬臂
      }
 
-    // mraa_gpio_write(gpio1, 1); // 继电器通电，控制抬臂舵机
-    // lift(2);
-    // mraa_gpio_write(gpio1, 0); // 继电器断电，控制左右臂舵机
-    // number(0, 0, 111, 1); // 控制机械臂擦除字迹，该情况不使用bx, by, 故bx，by置零
+    mraa_gpio_write(gpio1, 0); // 继电器通电，控制抬臂舵机
+    usleep(30000);
+    lift(2);
+    mraa_gpio_write(gpio1, 1); // 继电器断电，控制左右臂舵机
+    usleep(30000);
+    drawTo(rubberx,rubbery+10);
+    rotate(pwm1, 180);
+    usleep(50000);
+    mraa_gpio_write(gpio1, 0); // 继电器通电，控制抬臂舵机
+    usleep(30000);
+    lift(1); // 插回笔擦中
+    lift(1);
+    mraa_gpio_write(gpio1, 1); // 继电器断电
+    
+    deinit();
+    return 0;
 }
